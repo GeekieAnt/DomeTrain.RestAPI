@@ -1,18 +1,20 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
-namespace Movies.Application.Models;
+namespace Movies.Domain.Models;
 
 public partial class Movie
 {
     public required Guid Id { get; init; }
-    
+
     public required string Title { get; set; }
 
     public string Slug => GenerateSlug();
 
     public required int YearOfRelease { get; set; }
-    
-    public required List<string> Genres { get; init; } = new();
+
+    [JsonIgnore]
+    public required List<Genre> Genres { get; init; } = new();
 
     private string GenerateSlug()
     {

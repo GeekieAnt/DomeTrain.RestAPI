@@ -1,6 +1,6 @@
-﻿using Movies.Application.Models;
-using Movies.Contracts.Requests;
+﻿using Movies.Contracts.Requests;
 using Movies.Contracts.Responses;
+using Movies.Domain.Models;
 
 namespace Movies.Api.Mapping;
 
@@ -13,10 +13,10 @@ public static class ContractMapping
             Id = Guid.NewGuid(),
             Title = request.Title,
             YearOfRelease = request.YearOfRelease,
-            Genres = request.Genres.ToList()
+            Genres = request.Genres.ToList(),
         };
     }
-    
+
     public static Movie MapToMovie(this UpdateMovieRequest request, Guid id)
     {
         return new Movie
@@ -24,7 +24,7 @@ public static class ContractMapping
             Id = id,
             Title = request.Title,
             YearOfRelease = request.YearOfRelease,
-            Genres = request.Genres.ToList()
+            Genres = (List<Genre>)request.Genres
         };
     }
 
@@ -36,7 +36,7 @@ public static class ContractMapping
             Title = movie.Title,
             Slug = movie.Slug,
             YearOfRelease = movie.YearOfRelease,
-            Genres = movie.Genres
+            Genres = (List<Genre>)movie.Genres
         };
     }
 

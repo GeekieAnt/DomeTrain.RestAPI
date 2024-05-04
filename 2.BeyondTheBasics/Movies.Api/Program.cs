@@ -1,6 +1,6 @@
 using Movies.Api.Mapping;
 using Movies.Application;
-using Movies.Application.Database;
+using Movies.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -10,7 +10,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplication();
-builder.Services.AddDatabase(config["Database:ConnectionString"]!);
+builder.Services.AddInfrastructure(config.GetConnectionString("MoviesDbContext")!);
+
 
 var app = builder.Build();
 
@@ -25,8 +26,5 @@ app.UseAuthorization();
 
 app.UseMiddleware<ValidationMappingMiddleware>();
 app.MapControllers();
-
-var dbInitializer = app.Services.GetRequiredService<DbInitializer>();
-await dbInitializer.InitializeAsync();
 
 app.Run();

@@ -1,4 +1,6 @@
-﻿namespace Movies.Contracts.Requests;
+﻿using Movies.Domain.Models;
+
+namespace Movies.Contracts.Requests;
 
 public class CreateMovieRequest
 {
@@ -6,5 +8,5 @@ public class CreateMovieRequest
 
     public required int YearOfRelease { get; init; }
 
-    public required IEnumerable<string> Genres { get; init; } = Enumerable.Empty<string>();
+    public required List<Genre> Genres { get; init; }
 }

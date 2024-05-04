@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Movies.Api.Mapping;
-using Movies.Application.Repositories;
 using Movies.Application.Services;
 using Movies.Contracts.Requests;
 
@@ -17,30 +16,30 @@ public class MoviesController : ControllerBase
     }
 
     [HttpPost(ApiEndpoints.Movies.Create)]
-    public async Task<IActionResult> Create([FromBody]CreateMovieRequest request,
+    public async Task<IActionResult> Create([FromBody] CreateMovieRequest request,
         CancellationToken token)
     {
         var movie = request.MapToMovie();
         await _movieService.CreateAsync(movie, token);
         var movieResponse = movie.MapToResponse();
-        return CreatedAtAction(nameof(Get), new { idOrSlug = movie.Id }, movieResponse);
+        return Ok(movieResponse);
     }
 
-    [HttpGet(ApiEndpoints.Movies.Get)]
-    public async Task<IActionResult> Get([FromRoute] string idOrSlug,
-        CancellationToken token)
-    {
-        var movie = Guid.TryParse(idOrSlug, out var id)
-            ? await _movieService.GetByIdAsync(id, token)
-            : await _movieService.GetBySlugAsync(idOrSlug, token);
-        if (movie is null)
-        {
-            return NotFound();
-        }
+    //[HttpGet(ApiEndpoints.Movies.Get)]
+    //public async Task<IActionResult> Get([FromRoute] string idOrSlug,
+    //    CancellationToken token)
+    //{
+    //    var movie = Guid.TryParse(idOrSlug, out var id)
+    //        ? await _movieService.GetByIdAsync(id, token)
+    //        : await _movieService.GetBySlugAsync(idOrSlug, token);
+    //    if (movie is null)
+    //    {
+    //        return NotFound();
+    //    }
 
-        var response = movie.MapToResponse();
-        return Ok(response);
-    }
+    //    var response = movie.MapToResponse();
+    //    return Ok(response);
+    //}
 
     [HttpGet(ApiEndpoints.Movies.GetAll)]
     public async Task<IActionResult> GetAll(CancellationToken token)
@@ -52,8 +51,8 @@ public class MoviesController : ControllerBase
     }
 
     [HttpPut(ApiEndpoints.Movies.Update)]
-    public async Task<IActionResult> Update([FromRoute]Guid id,
-        [FromBody]UpdateMovieRequest request,
+    public async Task<IActionResult> Update([FromRoute] Guid id,
+        [FromBody] UpdateMovieRequest request,
         CancellationToken token)
     {
         var movie = request.MapToMovie(id);
